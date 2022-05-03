@@ -30,7 +30,7 @@
         </tr>
         <tr>
           <td>应付：{{ order.info.payAmount }}</td>
-          <td>用券：{{ order.info.couponAmount }}</td>
+          <td>用券：{{ order.info.vip ? order.info.couponAmount : 0 }}</td>
         </tr>
         <tr v-if="order.info.vip && order.member.type !== 'INNER'">
           <td>会员：{{ order.member.name }}</td>

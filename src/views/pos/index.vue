@@ -392,6 +392,10 @@ export default {
     }
 }
 
+.el-autocomplete-suggestion li.highlighted, .el-autocomplete-suggestion li:hover {
+   background-color: lightgray;
+}
+
 .cashier-input-item {
     width: 100%;
     padding: 7px;
