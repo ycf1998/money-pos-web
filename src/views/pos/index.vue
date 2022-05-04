@@ -120,7 +120,7 @@
     </el-row>
 
     <!-- 清单 -->
-    <el-dialog class="orderDialog" title="清单" :visible.sync="showOrderDialog">
+    <el-dialog v-loading.fullscreen.lock="fullscreenLoading" class="orderDialog" title="清单" :visible.sync="showOrderDialog">
       <el-row :gutter="10" style="text-align: center">
         <el-col :span="6"><h4>商品名称</h4></el-col>
         <el-col :span="6"><h4>原价</h4></el-col>
@@ -178,7 +178,8 @@ export default {
       tool: {
         editPrice: false
       },
-      showOrderDialog: false
+      showOrderDialog: false,
+      fullscreenLoading: false
     }
   },
   computed: {
@@ -294,7 +295,9 @@ export default {
     // 显示订单
     showOrder() {
       if (this.showOrderDialog === true) {
-        this.settleAccounts()
+        if (this.fullscreenLoading === false) {
+          this.settleAccounts()
+        }
       } else {
         if (this.orderList.length === 0) {
           this.$notify({
@@ -310,6 +313,7 @@ export default {
     },
     // 结算
     settleAccounts() {
+      this.fullscreenLoading = true
       const data = {
         member: this.currentMember?.id,
         orderDetail: this.orderList
@@ -330,7 +334,10 @@ export default {
           member: Object.assign({ }, this.currentMember)
         }
         this.settleAccountsOk()
+        this.fullscreenLoading = false
         this.$refs.child.print(printOrderInfo)
+      }).catch(() => {
+        this.fullscreenLoading = false
       })
     },
     // 结算成功，清理打印
