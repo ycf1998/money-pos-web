@@ -16,7 +16,7 @@
       style="width: 100%;"
       @selection-change="crud.selectionChangeHandler"
     >
-      <el-table-column type="selection" width="55" />
+      <el-table-column type="selection" width="55" :selectable="row => row.id !== 0" />
       <el-table-column :show-overflow-tooltip="true" prop="tenantCode" label="租户编码" />
       <el-table-column :show-overflow-tooltip="true" prop="tenantName" label="租户名称" />
       <el-table-column :show-overflow-tooltip="true" prop="logo" label="logo">
@@ -37,7 +37,7 @@
         fixed="right"
       >
         <template slot-scope="scope">
-          <ud-operation :data="scope.row" :permission="permission" />
+          <ud-operation :data="scope.row" :permission="permission" :disabled-del="scope.row.id === 0" />
         </template>
       </el-table-column>
     </el-table>
@@ -128,6 +128,10 @@ export default {
         ]
       }
     }
+  },
+  created() {
+    // 修改新增成功提示信息
+    this.crud.msg.add = '新增成功, 租户默认管理员账号: admin, 密码: admin'
   },
   methods: {
     // 加载logo

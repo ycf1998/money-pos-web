@@ -14,6 +14,8 @@
 </template>
 
 <script>
+import oss from '@/utils/oss'
+
 export default {
   name: 'SidebarLogo',
   props: {
@@ -24,9 +26,18 @@ export default {
   },
   data() {
     return {
-      title: window.tenant?.tenantName || '麦尼科技',
-      logo: window.tenant?.logo || 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
+      title: null,
+      logo: null
     }
+  },
+  created() {
+    // 【qk-money】：租户相关UI变更
+    const title = window.tenant?.tenantName || 'QK-Money'
+    const logo = oss.loadImage(window.tenant?.logo, oss.TYPE.LOCAL) || 'https://wpimg.wallstcn.com/69a1c46c-eb1c-4b46-8bd4-e9e686ef5251.png'
+    this.title = title
+    this.logo = logo
+    // 切换favicon
+    document.querySelector("link[rel*='icon']").href = logo
   }
 }
 </script>

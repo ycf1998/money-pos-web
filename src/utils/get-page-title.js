@@ -1,10 +1,10 @@
 import defaultSettings from '@/settings'
 
-const title = defaultSettings.title || 'Vue Element Admin'
-
 export default function getPageTitle(pageTitle) {
+  // 【qk-money】：租户标签title
+  const title = window.tenant ? window.tenant.tenantName : defaultSettings.title
   if (pageTitle) {
-    return `${pageTitle} - ${title}`
+    return `${title} - ${pageTitle}`
   }
   return `${title}`
 }

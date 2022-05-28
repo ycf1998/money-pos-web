@@ -6,13 +6,23 @@
 
     <div class="user-profile">
       <div class="box-center">
-        <pan-thumb :image="user.avatar + ''" :height="'100px'" :width="'100px'" :hoverable="false">
+        <pan-thumb :image="loadAvatar(user.avatar) + ''" :height="'100px'" :width="'100px'" :hoverable="false">
           <div>Hello</div>
           {{ user.nickname }}
         </pan-thumb>
       </div>
       <div class="box-center">
-        <div class="user-name text-center">{{ user.nickname }}</div>
+        <div class="user-name text-center">{{ user.nickname }}
+          <el-upload
+            style="display: inline"
+            :action="uploadAvatar()"
+            :headers="uploadHeader()"
+            :on-success="handleLogoSuccess"
+            :show-file-list="false"
+            accept="image/*"
+          >
+            <el-link type="primary" icon="el-icon-picture-outline" />
+          </el-upload></div>
         <div class="user-role text-center text-muted">{{ user.role }}</div>
       </div>
     </div>
@@ -44,6 +54,7 @@
 
 <script>
 import PanThumb from '@/components/PanThumb'
+import oss from '@/utils/oss'
 
 export default {
   components: { PanThumb },
@@ -59,6 +70,21 @@ export default {
           remark: ''
         }
       }
+    }
+  },
+  methods: {
+    uploadHeader() {
+      return oss.getHeaders()
+    },
+    loadAvatar(url) {
+      return oss.loadImage(url, oss.TYPE.LOCAL)
+    },
+    uploadAvatar() {
+      return process.env.VUE_APP_BASE_API + '/users/uploadAvatar'
+    },
+    // 选择logo预览
+    handleLogoSuccess(response, file) {
+      this.user.avatar = URL.createObjectURL(file.raw)
     }
   }
 }
